@@ -1,9 +1,18 @@
 class Tree
 	attr_accessor :children, :node_name
 	
-	def initialize(name, children=[])
+	def initialize(arg, children=[])
+		if arg.is_a?(Hash)
+			arg.each do |key, value|
+				@node_name = key
+				value.each do |k, v|
+					children.push(Tree.new({ k => v }))
+				end
+			end
+		else
+			@node_name = arg
+		end
 		@children = children
-		@node_name = name
 	end
 	
 	def visit_all(&block)
@@ -24,3 +33,20 @@ puts
 
 puts "visiting entire tree"
 ruby_tree.visit_all { |node| puts node.node_name }
+
+puts
+family_tree = Tree.new(
+	{
+		'grandpa' => {
+			'dad' => {
+				'child 1' => { },
+				'child 2' => { }
+			},
+			'uncle' => {
+				'child 3' => {},
+				'child 4' => {}
+			}
+		}
+	}
+)
+family_tree.visit_all { |node| puts node.node_name }
