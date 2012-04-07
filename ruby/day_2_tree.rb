@@ -3,13 +3,9 @@ class Tree
 	
 	def initialize(arg, children=[])
 		if arg.is_a?(Hash)
-			arg.each do |key, value|
-				@node_name = key
-				value.each do |k, v|
-					children.push(Tree.new({ k => v }))
-				end
-			end
-		else
+      @node_name = arg.keys[0]
+      children = arg[@node_name].map { |k,v| Tree.new({ k => v })}
+ 		else
 			@node_name = arg
 		end
 		@children = children
